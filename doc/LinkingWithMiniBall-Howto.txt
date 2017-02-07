@@ -1,0 +1,85 @@
+*****************************************************************************
+**
+**  Including the MiniBall-Detector-simulation into your Geant4 simulation
+**
+*****************************************************************************
+
+The GNUmakefile in the g4miniball-package copies the library of
+all classes (libMiniBall.a) in the lib-directory (g4miniball/lib).
+
+To use a MiniBall-Detector in your simulation simply construct it
+in your DetectorConstruction-class e.g.
+
+  class BraZDetectorConstruction : public G4VUserDetectorConstruction
+  {
+    public:
+      BraZDetectorConstruction();
+     ~BraZDetectorConstruction();
+
+    public:
+      G4VPhysicalVolume* Construct();
+  }
+
+  G4VPhysicalVolume* BraZDetectorConstruction::Construct()
+  {
+
+  ...
+
+
+   MiniBallTripleDetector* MB_detector
+       = new MiniBallTripleDetector(histoManager, "TripleCluster", world,
+			 10*cm, 180.*deg, 0., -30.*deg, false, false);
+   MB_detector->Construct();
+
+   ...
+
+   }
+
+besides you have to specify the libMiniBall.a and the include-path in
+your GNUmakefile, so just add the following lines:
+
+   MBINC := /home/cb/boie/g4miniball/include
+   MBLIB := /home/cb/boie/g4miniball/lib
+
+   CPPFLAGS += -I$(MBINC)
+   EXTRALIBS = -L$(MBLIB) -lMiniBall
+
+So your GNUmakefile will e.g. look like:
+
+  # --------------------------------------------------------------
+  # GNUmakefile for simulation of Bremsstrahlung in the alpha decay.  
+  # Gabriele Cosmo, 06/04/98. Modifications by Hans Boie 
+  # --------------------------------------------------------------
+
+  name := BraZ
+  G4TARGET := $(name)
+  G4EXLIB := true
+
+  ROOTCFLAGS   := $(shell root-config --cflags)
+  ROOTLIBS     := $(shell root-config --libs)
+  ROOTGLIBS    := $(shell root-config --glibs)
+
+  MBINC := /home/cb/boie/g4miniball/include
+  MBLIB := /home/cb/boie/g4miniball/lib
+
+  ifndef G4INSTALL
+    G4INSTALL = ../../..
+  endif
+
+  .PHONY: all
+  all: lib bin
+
+  include $(G4INSTALL)/config/architecture.gmk
+
+  CPPFLAGS += $(INCFLAGS) $(ROOTCFLAGS) -I$(MBINC)
+  LDFLAGS  += $(ROOTLIBS) $(ROOTGLIBS)
+  EXTRALIBS = -L$(MBLIB) -lMiniBall
+
+  include $(G4INSTALL)/config/binmake.gmk
+
+Good luck!
+
+hans.boie@mpi-hd.mpg.de
+
+
+

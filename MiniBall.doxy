@@ -1,0 +1,24 @@
+/*! \mainpage g4miniball - A simulation package for MiniBall cluster detectors
+ * 
+ * <center>
+ * <img src="http://www.mpi-hd.mpg.de/personalhomes/boie/g4miniball/pic/MiniBall.gif">
+ * </center>
+ *
+ * \section intro_sec Introduction
+ *
+ * <p>In the first place this package was written to simulate just single
+ * triple cluster in the Heidelberg experiment "Bremsstrahlung im
+ * Alpha Zerfall". In principle it is also capable of simulating the
+ * whole MiniBall detector array. Please be aware that lots of features are
+ * though implemented not sufficiently tested so far.
+ *
+ * <p> More information you will find on the 
+ * <a href=http://www.mpi-hd.mpg.de/mbwiki/wiki/MiniballSimulation"> 
+ * MiniBallSimulation-Homepage </a>
+ * in the MiniBall Wiki Web (contact 
+ * <a href="mailto:heiko.scheit@mpi-hd.mpg.de">Heiko Scheit</a> 
+ * for the login)
+ * 
+ *
+ */
+

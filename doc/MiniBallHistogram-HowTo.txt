@@ -1,0 +1,278 @@
+*****************************************************************************
+**
+**  Generating Histograms and Trees with g4miniball
+**
+*****************************************************************************
+
+1) The structure
+----------------
+
+I the first place, I must admit, generating histograms or trees with 
+g4miniball seems to be rather complicated, but I still believe it makes some
+sense.
+
+The procedure is split up into two parts and therefore it is done by two
+classes:
+
+ 1) MiniBallHistoManager: collecting the data during the simulation 
+
+ 2) MiniBallHistoGenerator: writing the data into histograms or trees. 
+
+The MiniBallHistoManager collects all the data and uses the interfaces
+defined by the class MiniBallHistoGenerator to write them to disk. This
+makes it easy to adapt the format of the generated data to your requirements.
+At the moment two different formats are implemented:
+
+   Root: MiniBallRootGenerator - root file, see http://root.cern.ch
+   Text: MiniBallTextGenerator - very basic text output
+
+both are daughter classes of MiniBallHistoGenerator.
+If you want to build an new interface, you will find it easy to derive
+it from the mother class or one of these classes.
+
+2) Creating an MiniBallHistoManager object 
+------------------------------------------
+
+First create an MiniBallHistoGenerator object and then the 
+MiniBallHistoManager, e.g.
+
+  MiniBallHistoGenerator* histoGen = new MiniBallRootGenerator("miniball.root");
+  MiniBallHistoManager* histoManager = new MiniBallHistoManager(histoGen);
+
+You have to give this pointer to all MiniBall detectors you create as
+the first parameter, e.g.
+
+  MiniBallTripleDetector* detector 
+    = new MiniBallTripleDetector(histoManager, 10.*cm, 0., 0., true);
+
+All clusters you create and all detectors will be given an index starting
+from zero.
+
+3) Histograms and tree
+----------------------
+
+The histogram manager provides methods to create several histograms or fields in a ntuple
+or both.
+
+segment histograms:  BookHisto(G4String name, G4int cryo_id,G4int det_nb, G4int seg_id);
+
+		     name	     histogram name
+		     cryo_id	     ID of the cryostat
+		     det_nb	     ID of the detector in the cryostat 
+				     (running from 0 to 2 in a triple cryostat)
+		     seg_id	     ID of the segment
+				     (possible values: CORE, 0, 1, 2, 3, 4, 5)
+
+addback histograms:  BookAddbackCryostat(G4String name, G4int cryo_id);
+
+		     name	     histogram name
+		     cryo_id	     ID of the cryostat
+
+You can also book all histograms in a given detector, in a given cryostat or all 
+histograms:
+
+		     BookAllInDetector(G4String name, G4int cryo_id, G4int det_nb); 
+		     BookAllInCryostat(G4String name, G4int cryo_id);
+		     BookAll();
+
+These methods use standard name extensions for the histogram names.
+
+To create a ntuple consisting of several values you just add one field after the other. 
+The ntuple will be created automatically when you add the first column.
+
+a) energies:
+
+segment energy:      AddFieldSegmentEn(G4String name, G4int cryo_id, G4int det_nb,
+				       G4int seg_id);
+
+addback energy:      AddFieldAddbackCryostatEn(G4String name, G4int cryo_id);
+
+Again you can add all energies in a given detector, cryostat or all energies:
+
+		     AddFieldAllInDetectorEn(G4String name,G4int cryo_id, G4int det_nb);
+		     AddFieldAllInCryostatEn(G4String name, G4int cryo_id);
+		     AddFieldAllEn(G4String name);
+
+b) segment, detector and cryostat numbers:
+
+segment number:	     AddFieldSegmentNb(G4String name);
+
+detector number:     AddFieldDetectorNb(G4String name);
+
+cryostat number:     AddFieldCryostatNb(G4String name);
+
+Note that the segment number runs from 0 to 5 clockwise. If you want to get the
+real segment number as written on the cryostat use the method:
+
+real segment number: AddFieldSegmentCode(G4String name);
+
+c) event number, track number
+
+event number:	     AddFieldEventNb(G4String name);
+
+track number:	     AddFieldTraceNb(G4String name);
+
+d) position
+
+The position of the main or the first interaction can be used in world- or
+detector-coordinates
+
+detector-coordinates in cylindrical coordinates:
+
+r, phi and z:	     AddFieldPositionInDet(G4String name);
+		     
+r:		     AddFieldRadiusInDet(G4String name);
+phi:		     AddFieldPhiInDet(G4String name);
+z:		     AddFieldZInDet(G4String name);
+
+in Cartesian:
+
+x:		     AddFieldXInDet(G4String name);
+y:		     AddFieldYInDet(G4String name);
+
+word-coordinates in Cartesian coordinates:
+
+x, y, and z:	     AddFieldPositionInWorld(G4String name);
+
+x:		     AddFieldWorldX(G4String name);
+y:		     AddFieldWorldY(G4String name);
+z:		     AddFieldWorldZ(G4String name);
+
+For the position of the first interaction just add "FI" after "AddField", e.g.
+
+		     AddFieldFIPositionInDet(G4String name);
+
+4) Tuple Type
+-------------
+
+At the moment two different ways of writing data into the tuple are implemented: 
+
+  INTERACTION        writes the tuple after each interaction
+
+  EVENT		     accumulates the energies of all interactions of one
+		     event in the segments
+
+The default type is EVENT. You can change the tuple type using the method:
+
+                     SetMBTupleType(G4int type);
+
+Take care to do this before starting your simulation.
+
+5) Include other data in a miniball tuple
+-----------------------------------------
+
+There are different ways to include other data, e.g. from other detectors, into your
+ntuple.
+
+a) Using the MiniBall-tuple
+
+Inherit your own histogram manager class from MiniBallHistoManager. The method
+
+		     MiniBallTuple* GetMiniBallTuple();
+
+returns you a pointer to the MiniBallTuple and you can just add your own fields 
+using the method
+
+		     AddColumn(G4String field_name, G4double default_value);
+
+Take care to fill the columns in your EventAction class, using
+
+		     FillColumn(G4int column_id, G4double value);
+
+If you have written data to the tuple, invoke
+
+		     SetMBTupleWritten();
+
+to report to the MiniBallHistoManager that there is data which has to be written and
+at the end of you EndOfEvent method call the EndOfEvent method of the mother class:
+
+		     MiniBallEventAction::EndOfEventAction(evt);
+
+So your HistoManager class might look like
+
+  class BraZHistoManager : public MiniBallHistoManager
+  {
+  public:
+    BraZHistoManager(MiniBallHistoGenerator* histGen);
+   ~BraZHistoManager();
+
+    AlphaEnergy(G4double alpha_energy);
+
+  ...
+  };
+
+
+  BraZHistoManager::BraZHistoManager(MiniBallHistoGenerator* histGen)
+   :MiniBallHistoManager(histGen)
+  {  
+    BraZTuple = GetMiniBallTuple();
+    if(BraZTuple) {
+      DetAlphaEnId = BraZTuple->AddColumn("aE", -100*keV);
+      DetAlphaXId = BraZTuple->AddColumn("aX", -10*cm);
+      DetAlphaYId = BraZTuple->AddColumn("aY", -10*cm);
+    
+    ...
+  }
+
+  void BraZHistoManager::AlphaEnergy(G4double alpha_energy)
+  {
+    if(BraZTuple)
+      BraZTuple->FillColumn(AlphaEnId, alpha_energy);
+  }  
+
+and your EndOfEvent method in the EventAction class might look like:
+
+  void BraZEventAction::EndOfEventAction(const G4Event* evt)
+  {
+    G4bool SiMBTupleWritten = false;
+ 
+    ...
+     	
+           if(totE > 0) {
+             histoManager->AlphaEnergy(totE);
+	     SiMBTupleWritten = true;
+    
+    ...
+
+    if(SiMBTupleWritten) 
+      histoManager->SetMBTupleWritten();
+  }
+  MiniBallEventAction::EndOfEventAction(evt);
+}  
+
+b) Using your own MiniBallTuple
+
+With the method
+
+	             SetMiniBallTuple(MiniBallTuple* tup);
+
+you can hand your own MiniBallTuple to the MiniBallHistoManager. Take care that you
+have to do this before the first field is added to the MiniBallTuple or else this
+method will have no effect.
+
+You can generate your own tuple by using the method NewTuple() of the MiniBallHistoGenerator:
+
+  tup = histoGenerator->NewTuple("rtree")
+
+The columns of your tuple containing values of the MiniBall array will be filled, but 
+you have to invoke the Fill() method of your tuple at the end of the event in your
+EndOfEvent method in your EventAction class:
+
+  tup->Fill();
+
+The method WriteMBTuple() of the MiniBallHistoManager indicates you if there were data
+written into your tuple by the MiniBallHistoManager during the event.
+ 
+c) Adding a second tree
+
+The simplest way to add your data to the file is just to create a new tuple using
+the methods of the HistoGenerator.
+
+Good luck!
+
+hans.boie@mpi-hd.mpg.de
+
+
+
+
+

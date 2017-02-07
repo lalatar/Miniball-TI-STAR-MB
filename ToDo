@@ -1,0 +1,20 @@
+Things to do
+============
+
+
+geometry
+--------
+
+* add coldfinger and dewar
+
+histogramming
+-------------
+
+* add arrays for all addback energies
+* add arrays for the n highest detector/cluster energies
+* add arrays of hit detector
+
+examples
+--------
+
+* add more complex examples

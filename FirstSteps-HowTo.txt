@@ -1,0 +1,93 @@
+****************************************************************************
+**
+**  First Steps
+**
+*****************************************************************************
+
+This HowTo describes the first steps to get a simulation running.
+
+1) Compiling the library
+------------------------
+
+Either you use your own Geant4 installation or you use the Geant4 installation
+on the Heidelberg MPI-K computer cluster.
+
+For the Geant4 installation on the MPI-K computer cluster you should use
+the two scripts provided to set all environment variables:
+
+	. /cern/geant4/Geant4.rc
+	. /cern/geant4/Root.rc
+
+(This system is compiled with gcc 3.2.3 which is the recommended 
+compiler version)
+
+Now enter the g4miniball directory and just type
+
+   	make
+or      make mblib
+
+This creates the MiniBall-library in the MBLIB directory (by default ./lib)
+
+
+2) Compiling the example simulation
+-----------------------------------
+
+In the "examples" directory you find example simulations.
+
+Enter the directory of a example simulation, e.g. "Ex01" and type 
+
+  make
+
+(type "make examples" in the g4miniball directory to compile all
+examples)
+
+An binary Ex01 will be created in the G4BIN directory. Execute this 
+binary to start the example simulation.
+
+If you start the simulation you will get a prompt:
+
+   Idle>
+
+To start the event generation and the tracking use the following command
+
+   Idle>/run/beamOn 1000000
+
+where the parameter is the number of events to be generated.
+The Ex01 simulation generates one triple cluster and an isotropic source.
+The output is a root-file called "miniball.root" containing several histograms
+and a root-tree.
+
+The are different ways to get a visualization of the scene. For an example
+use one of the included macros: 
+
+    Idle>/control/execute OGLS_vis.mac
+
+You can change the point of view by
+
+    Idle>/vis/viewer/set/viewpointThetaPhi <theta> <phi>
+
+and the position of the lights by
+
+    Idle>/vis/viewer/set/lightsThetaPhi <theta> <phi>
+
+For more details please see http://geant4.web.cern.ch
+
+
+3) Examples
+-----------
+
+The provided examples show how to use the package. 
+
+Ex01:	a simple triple cluster with an isotropic source.
+
+Ex02:	several triple clusters placed in a DetectorConstruction class
+
+Ex03:	example for a setup created by the MiniBallDetectorArray class
+
+Ex04:	example for integration of a user defined detector in a
+        miniball setup
+
+Good luck
+
+hans.boie@mpi-hd.mpg.de
+

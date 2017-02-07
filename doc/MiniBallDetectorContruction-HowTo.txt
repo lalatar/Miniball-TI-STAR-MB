@@ -1,0 +1,87 @@
+*****************************************************************************
+**
+**  Constructing a Detector Array using MiniBall Cluster
+**
+*****************************************************************************
+
+The easiest way to build a simulation with a miniball cluster detector
+is just to create an object of one of the following classes:
+
+   MiniBallSingleDetector - a miniball capsule
+   MiniBallTripleDetector - a triple cryostat
+
+You create an object and give the pointer to it as parameter to the method
+
+                SetUserInitialization(G4VUserDetectorConstruction*);  
+
+of the run manager. Then your main() would look like:
+
+  ...
+
+  int main() 
+  {
+
+  G4RunManager* runManager = new G4RunManager;
+
+  MiniBallTripleDetector* detector 
+    = new MiniBallTripleDetector(10*cm,0.,0., true, true);
+
+  runManager->SetUserInitialization(detector);
+
+  ...
+
+For an example look at the file "Ex01.cc"
+
+If you want to place several cluster or capsules in your world volume
+you must derive your own DetectorConstruction class from 
+G4VUserDetectorConstruction.
+
+Create the cluster/detector objects in the Construct() method of your 
+own class and take care to invoke the Construct() method of these 
+objects.
+
+The classes MiniBallSingleDetector and MiniBallTripleDetector give
+you a wide range of different constructors to specify the position of
+the detector within your mother volume.
+
+So your DetectorConstruction class may look like:
+
+  class Ex02DetectorConstruction : public G4VUserDetectorConstruction
+  {
+  public:
+    // constructors
+    Ex02DetectorConstruction(MiniBallHistoManager*);
+    Ex02DetectorConstruction(MiniBallHistoManager*, G4bool, G4bool);
+    // destructor
+    ~Ex02DetectorConstruction();
+
+    ///this actually constructs the whole detector 
+    G4VPhysicalVolume* Construct();
+    
+  ...
+ 
+  };
+
+  G4VPhysicalVolume* Ex02DetectorConstruction::Construct()
+  {
+  
+  ...
+
+    MiniBallTripleDetector* temp
+      = new MiniBallTripleDetector(histoManager,
+			           mother, cluster_trafo[i],
+			           capsule, cryowall);
+    temp->Construct();
+
+  ...
+  }
+
+As an example you can look at the class Ex02DetectorConstruction of the
+example Ex02.
+
+Good luck!
+
+hans.boie@mpi-hd.mpg.de
+
+
+
