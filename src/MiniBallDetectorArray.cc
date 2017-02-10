@@ -107,6 +107,33 @@ MiniBallDetectorArray::MiniBallDetectorArray(G4VPhysicalVolume* p_mother,
 
 
 MiniBallDetectorArray::MiniBallDetectorArray(G4VPhysicalVolume* p_mother,
+					     G4int p_nb_of_clusters, 
+					     std::vector<std::string> p_name, 
+					     std::vector<G4int> p_cluster_type, 
+					     std::vector<G4double> p_rho, 
+					     std::vector<G4double> p_theta, 
+					     std::vector<G4double> p_phi,
+					     std::vector<G4double> p_spin, 
+					     G4bool p_capsule, 
+					     G4bool p_cryowall)
+  : histoManager(NULL), mother(p_mother), nb_of_clusters(p_nb_of_clusters), 
+    capsule(p_capsule), cryowall(p_cryowall), 
+    det_vis_att(NULL), capsule_vis_att(NULL), cryo_vis_att(NULL),
+    use_labeled_colors(false)
+{
+  for(G4int clust=0; clust<nb_of_clusters; clust++)
+    {
+      name.push_back(p_name[clust]);
+      type.push_back(p_cluster_type[clust]);
+
+      PushBackDefaultParameters();
+    }
+
+  GetTransformations(p_rho, p_theta, p_phi, p_spin);
+}
+
+
+MiniBallDetectorArray::MiniBallDetectorArray(G4VPhysicalVolume* p_mother,
   G4int p_nb_of_clusters, G4String* p_name, 
   G4int* p_cluster_type, G4Transform3D* p_transform, 
   G4bool p_capsule, G4bool p_cryowall)
@@ -173,6 +200,33 @@ MiniBallDetectorArray::MiniBallDetectorArray(MiniBallHistoManager* HM,
 					     G4VPhysicalVolume* p_mother,
 					     G4int p_nb_of_clusters, 
 					     std::vector<G4String> p_name, 
+					     std::vector<G4int> p_cluster_type, 
+					     std::vector<G4double> p_rho, 
+					     std::vector<G4double> p_theta, 
+					     std::vector<G4double> p_phi,
+					     std::vector<G4double> p_spin, 
+					     G4bool p_capsule, 
+					     G4bool p_cryowall)
+  : histoManager(HM), mother(p_mother), nb_of_clusters(p_nb_of_clusters), 
+    capsule(p_capsule), cryowall(p_cryowall), 
+    det_vis_att(NULL), capsule_vis_att(NULL), cryo_vis_att(NULL),
+    use_labeled_colors(false)
+{
+  for(G4int clust=0; clust<nb_of_clusters; clust++)
+    {
+      name.push_back(p_name[clust]);
+      type.push_back(p_cluster_type[clust]);
+
+      PushBackDefaultParameters();
+    }
+
+  GetTransformations(p_rho, p_theta, p_phi, p_spin);
+}
+
+MiniBallDetectorArray::MiniBallDetectorArray(MiniBallHistoManager* HM, 
+					     G4VPhysicalVolume* p_mother,
+					     G4int p_nb_of_clusters, 
+					     std::vector<std::string> p_name, 
 					     std::vector<G4int> p_cluster_type, 
 					     std::vector<G4double> p_rho, 
 					     std::vector<G4double> p_theta, 

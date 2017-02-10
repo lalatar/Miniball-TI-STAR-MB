@@ -101,6 +101,12 @@ public:
 		       G4bool capsule=true, G4bool cryowall=true);
 
   MiniBallDetectorArray(G4VPhysicalVolume* mother, G4int nb_of_clusters,
+		       std::vector<std::string> name, std::vector<G4int> cluster_type,
+		       std::vector<G4double> rho, std::vector<G4double> theta, 
+		       std::vector<G4double> phi, std::vector<G4double> spin,
+		       G4bool capsule=true, G4bool cryowall=true);
+
+  MiniBallDetectorArray(G4VPhysicalVolume* mother, G4int nb_of_clusters,
 			G4String* name, G4int* cluster_type,
 			G4Transform3D* transform,
 			G4bool capsule=true, G4bool cryowall=true);
@@ -114,6 +120,13 @@ public:
   MiniBallDetectorArray(MiniBallHistoManager* histoManager,
 		       G4VPhysicalVolume* mother, G4int nb_of_clusters,
 		       std::vector<G4String> name, std::vector<G4int> cluster_type,
+		       std::vector<G4double> rho, std::vector<G4double> theta, 
+		       std::vector<G4double> phi, std::vector<G4double> spin,
+		       G4bool capsule=true, G4bool cryowall=true);
+
+  MiniBallDetectorArray(MiniBallHistoManager* histoManager,
+		       G4VPhysicalVolume* mother, G4int nb_of_clusters,
+		       std::vector<std::string> name, std::vector<G4int> cluster_type,
 		       std::vector<G4double> rho, std::vector<G4double> theta, 
 		       std::vector<G4double> phi, std::vector<G4double> spin,
 		       G4bool capsule=true, G4bool cryowall=true);
