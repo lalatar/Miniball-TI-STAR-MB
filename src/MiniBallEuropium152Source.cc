@@ -11,6 +11,8 @@
 #include "MiniBallEuropium152Source.hh"
 #include "Randomize.hh"
 
+#include "G4SystemOfUnits.hh" // new version geant4.10 requires units
+
 MiniBallEuropium152Source::MiniBallEuropium152Source()
   : MiniBallSource()
 {

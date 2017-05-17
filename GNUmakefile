@@ -26,6 +26,7 @@ all: mblib
 include $(G4INSTALL)/config/architecture.gmk
 
 CPPFLAGS += $(MB_DEFINITIONS) -g $(INCFLAGS) $(ROOTCFLAGS)
+CPPFLAGS += -DG4MULTITHREADED
 LDFLAGS  += $(ROOTLIBS) $(ROOTGLIBS)
 
 include $(G4INSTALL)/config/binmake.gmk

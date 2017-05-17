@@ -39,14 +39,14 @@ void MiniBallEventAction::EndOfEventAction(const G4Event* evt)
 
       size_t nb_detectors = histoManager->GetNbOfDetectors();
       
-      for(size_t det_id=0; det_id<nb_detectors; det_id++)
+      for(size_t id=0; id<nb_detectors; id++)
 	{ 
 	  //every detector has its own HitsCollection 
-	  G4int HCID = histoManager->GetMBHitsCollectionID(det_id);
+	  G4int HCID = histoManager->GetMBHitsCollectionID(id);
 	  if(HCID<0)
 	    {
 	      G4cerr << "MiniBallHitsCollection of detector id "
-		     << det_id << " is missing" << G4endl;
+		     << id << " is missing" << G4endl;
 	      continue;
 	    }
 

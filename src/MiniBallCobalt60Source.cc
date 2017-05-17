@@ -11,6 +11,8 @@
 #include "MiniBallCobalt60Source.hh"
 #include "Randomize.hh"
 
+#include "G4SystemOfUnits.hh" // new version geant4.10 requires units
+
 MiniBallCobalt60Source::MiniBallCobalt60Source()
   : MiniBallSource()
 {

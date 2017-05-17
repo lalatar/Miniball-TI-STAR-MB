@@ -9,6 +9,8 @@
 #include "G4Material.hh"
 #include "G4Element.hh"
 
+#include "G4SystemOfUnits.hh" // new version geant4.10 requires units
+
 MiniBallMaterial* MiniBallMaterial::fMiniBallMaterial = NULL;
 
 MiniBallMaterial* MiniBallMaterial::Get() {
@@ -39,7 +41,7 @@ MiniBallMaterial::MiniBallMaterial()
 
 	G4double vac_density = 1.225e-7*mg/cm3; 
 	G4double pressure    = 1.e-7*bar;
-	G4double temperature = STP_Temperature + 20*kelvin;
+	G4double temperature = CLHEP::STP_Temperature + 20*kelvin;
 	Vacuum = new G4Material("Vacuum_7", vac_density, 1,
 			kStateGas, temperature, pressure);
 	Vacuum->AddMaterial(Air, 1.); 

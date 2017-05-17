@@ -25,6 +25,8 @@
 #include "globals.hh"
 #include "G4Material.hh"
 
+#include "G4SystemOfUnits.hh" // new version geant4.10 requires units
+
 /************************************************************************
  * \name Crystall-dimensions:
  *

@@ -13,6 +13,8 @@
 #include "G4Gamma.hh"
 #include "Randomize.hh"
 
+#include "G4SystemOfUnits.hh" // new version geant4.10 requires units
+
 
 #define THETA_MAX M_PI
 
