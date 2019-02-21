@@ -1,3 +1,6 @@
+Miniball is added to TI-STAR + Miniball simulation 
+
+
 *****************************************************************************
 
 **General information**
