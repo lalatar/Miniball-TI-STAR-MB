@@ -1,4 +1,4 @@
-Miniball is added to TI-STAR + Miniball simulation 
+Miniball library is added to TI-STAR + Miniball simulation 
 
 
 *****************************************************************************
