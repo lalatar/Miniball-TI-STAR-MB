@@ -1365,7 +1365,6 @@ void MiniBallHistoManager::SetMBInteraction(size_t det_id, size_t seg_id,
       FirstInteractionPositionInWorld.set(positionInWorld.x(),
 					  positionInWorld.y(),
 					  positionInWorld.z());
-     
     }
 
   Interaction=true;
@@ -1417,9 +1416,8 @@ void MiniBallHistoManager::SetMBInteraction(size_t det_id, size_t seg_id,
 
 
       detectors[det_id]->MIHitSegment=seg_id;
-      detectors[det_id]->time = time;
     }
-
+  detectors[det_id]->time = time;
   //energy deposit in this interaction
   if(seg_id<(size_t)NB_OF_SEGMENTS)
     {

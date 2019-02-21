@@ -77,7 +77,7 @@ void MiniBallEventAction::EndOfEventAction(const G4Event* evt)
 		     
 		      size_t det_id = (*HPGeHC)[hit_nb]->GetDetectorID();
 		      size_t seg_id = (*HPGeHC)[hit_nb]->GetSegmentID();
-		      G4double time = 0.;
+			  
 		      histoManager->SetMBInteraction(det_id,
 						     seg_id,
 						     Edep,

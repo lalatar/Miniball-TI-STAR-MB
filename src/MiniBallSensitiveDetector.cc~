@@ -88,7 +88,7 @@ G4bool MiniBallSensitiveDetector::ProcessHits(G4Step* aStep,
   
   newHit->SetDetectorID(detectorID);
   newHit->SetTime(aStep->GetPostStepPoint()->GetGlobalTime());//Tomer added
-  //std::cout<<"Miniball Sensitive Detector Set time : "<<newHit->GetTime()<<std::endl;
+  std::cout<<"Miniball Sensitive Detector Set time : "<<newHit->GetTime()<<std::endl;
   G4StepPoint* stepPoint;
   if(process=="Transportation")
     stepPoint = aStep->GetPreStepPoint();

@@ -501,8 +501,7 @@ public:
   void SetMBInteraction(size_t det_id, size_t segment_id, G4double en,
 			G4int event_id,G4int trace_id,
 			G4ThreeVector positionInDet,
-			G4ThreeVector positionInWorld,
-			G4double time);
+			G4ThreeVector positionInWorld);
 
 //////////////////////////////////////////////////////////////////////////////
 
